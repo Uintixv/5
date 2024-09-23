@@ -2,7 +2,7 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 local Window = Fluent:CreateWindow({
-    Title = "Thuận dragon",
+    Title = "Thuận ngu",
     SubTitle = "Beta Version",
     TabWidth = 160,
     Size = UDim2.fromOffset(530, 350),
@@ -27,7 +27,7 @@ local Options = Fluent.Options
 do
 
 local id = game.PlaceId
-if id == 2753915549 then First_Sea = true; elseif id == 4442272183 then Second_Sea = true; elseif id == 7449423635 then Third_Sea = true; else game:Shutdown() end;
+if id == 5811374318 then First_Sea = true; elseif id == 5811374318 then Second_Sea = true; elseif id == 5811374318 then Third_Sea = true; else game:Shutdown() end;
 
 function AntiBan()
     for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
@@ -56,11 +56,11 @@ end)
 First_Sea = false
 Second_Sea = false
 Third_Sea = false
-if game.PlaceId == 2753915549 then
+if game.PlaceId == 5811374318 then
 First_Sea = true
-elseif game.PlaceId == 4442272183 then
+elseif game.PlaceId == 5811374318 then
 Second_Sea = true
-elseif game.PlaceId == 7449423635 then
+elseif game.PlaceId == 5811374318 then
 Third_Sea = true
 end
 
@@ -6851,7 +6851,7 @@ local SettingFarm = Tabs.Setting:AddSection("Farming")
                 while task.wait() do
              if _G.BringMob and bringmob then
             pcall(function()
-                for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
+                for i,v in pairs(game.Workspace.Mapstart:GetChildren()) do
                 if v.Name == MonFarm and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 350 then
                 if InMyNetWork(v.HumanoidRootPart) then
                 v.HumanoidRootPart.CFrame = FarmPos
