@@ -2044,9 +2044,9 @@ end
     local Distance = (RealTarget.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position)
         .Magnitude
     if Distance < 600 then
-        Speed = 350
+        Speed = 330
     elseif Distance >= 600 then
-        Speed = 350
+        Speed = 330
     end
     if BypassTP then
         if Distance > 10000 and not AutoNextIsland and not (game.Players.LocalPlayer.Backpack:FindFirstChild("Special Microchip") or game.Players.LocalPlayer.Character:FindFirstChild("Special Microchip") or game.Players.LocalPlayer.Backpack:FindFirstChild("God's Chalice") or game.Players.LocalPlayer.Character:FindFirstChild("God's Chalice") or game.Players.LocalPlayer.Backpack:FindFirstChild("Hallow Essence") or game.Players.LocalPlayer.Character:FindFirstChild("Hallow Essence") or game.Players.LocalPlayer.Character:FindFirstChild("Sweet Chalice") or game.Players.LocalPlayer.Backpack:FindFirstChild("Sweet Chalice")) and not (Name == "Fishman Commando" or Name == "Fishman Warrior") then
@@ -2484,7 +2484,7 @@ local listfastattack = {'Hơi Chậm','Trung Bình','Siêu Nhanh'}
 	elseif _G.FastAttackZueszYTB_Mode == "Trung Bình" then
 		_G.Fast_Delay = 0.1
 	elseif _G.FastAttackZueszYTB_Mode == "Siêu Nhanh" then
-		_G.Fast_Delay = 0.0000
+		_G.Fast_Delay = 0
 	end
 end)
 
