@@ -27,7 +27,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 ----------------------------------------------------------------------------------------------------------------------------------------------
 local Window = Fluent:CreateWindow({
-    Title = "Hiru Hub",
+    Title = "Mera Hub",
     SubTitle = "Version Beta 6⁵ | By Nguyen Vu Duy",
     TabWidth = 160,
     Size = UDim2.fromOffset(500, 320),
@@ -1672,6 +1672,24 @@ end)
         end
     end)
 
+local Cc = Tabs.Main:AddToggle("ToggleLevel", {
+        Title = "Auto Click",
+        Description = "",
+        Default = false })
+    ToggleLevel:OnChanged(function(Value)
+        AutoClick = Value
+    end)
+
+spawn(function()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if AutoClick then
+             pcall(function()
+                game:GetService'VirtualUser':CaptureController()
+                game:GetService'VirtualUser':Button1Down(Vector2.new(1e4, 1e4))
+            end)
+        end
+    end)
+end)
 
     local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
         Title = "Auto Farm Level",
