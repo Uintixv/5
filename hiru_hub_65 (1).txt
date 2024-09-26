@@ -27,7 +27,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 ----------------------------------------------------------------------------------------------------------------------------------------------
 local Window = Fluent:CreateWindow({
-    Title = "Mera Hub ff",
+    Title = "Mera Hub",
     SubTitle = "Version Beta 6⁵ | By Nguyen Vu Duy",
     TabWidth = 160,
     Size = UDim2.fromOffset(500, 320),
@@ -1672,13 +1672,6 @@ end)
         end
     end)
 
-local ToggleClick = Tabs.Main:AddToggle("MyToggle", {Title = "Kill Aura Raid", Default = false })
-
-    Toggle:OnChanged(function(e)
-        AutoClick = e
-    end)
-
-
     local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
         Title = "Auto Farm Level",
         Description = "",
@@ -2151,6 +2144,7 @@ local ToggleBone = Tabs.Main:AddToggle("ToggleBone", {
     Description = "", 
     Default = false })
 ToggleBone:OnChanged(function(Value)
+      AutoClick = Value
     _G.AutoBone = Value
     if Value == false then
         wait()
