@@ -8,12 +8,12 @@ local Window = Fluent:CreateWindow({
     TabWidth = 160,
     Size = UDim2.fromOffset(500, 320),
     Acrylic = true,
-    Theme = "Darker",
+    Theme = "Dark",
     MinimizeKey = Enum.KeyCode.End
 })
 local Tabs = {
     home = Window:AddTab({ Title = "Tab Info", Icon = "activity" }),
-    Main = Window:AddTab({ Title = "Tab Farm", Icon = "home" }),
+    Main = Window:AddTab({ Title = "Genaral", Icon = "" }),
     Sea = Window:AddTab({ Title = "Tab Sea Event", Icon = "anchor" }),
     ITM = Window:AddTab({ Title = "Tab Items", Icon = "sword" }),
     Setting = Window:AddTab({ Title = "Tab Setting", Icon = "settings" }),
@@ -1581,7 +1581,7 @@ Tabs.home:AddButton({
         end
     })
     
-local listfastattack = {'0.01','0.05','0.015','0.001','0.1','0.005','0','0.02'}
+local listfastattack = {'Super Fast','Nomal'}
 
     local DropdownDelayAttack = Tabs.Main:AddDropdown("DropdownDelayAttack", {
         Title = "Select Fast Attack",
@@ -1590,25 +1590,13 @@ local listfastattack = {'0.01','0.05','0.015','0.001','0.1','0.005','0','0.02'}
         Multi = false,
         Default = 1,
     })
-    DropdownDelayAttack:SetValue("0.05")
+    DropdownDelayAttack:SetValue("Super Fast")
     DropdownDelayAttack:OnChanged(function(Value)
     _G.m1m_Mode = Value
-	if _G.m1m_Mode == "0.1" then
-		_G.Fast_Delay = 0.1
-    elseif _G.m1m_Mode == "0.05" then
-		_G.Fast_Delay = 0.05
-	elseif _G.m1m_Mode == "0.005" then
-        _G.Fast_Delay = 0.005
-    elseif _G.m1m_Mode == "0.001" then
-		_G.Fast_Delay = 0.001
-    elseif _G.m1m_Mode == "0" then
-		_G.Fast_Delay = 0
-    elseif _G.m1m_Mode == "0.01" then
-        _G.Fast_Delay = 0.01
-    elseif _G.m1m_Mode == "0.015" then
-        _G.Fast_Delay = 0.015
-    elseif _G.m1m_Mode == "0.02" then
-        _G.Fast_Delay = 0.02
+	if _G.m1m_Mode == "Super Fast" then
+		_G.Fast_Delay = 0.0
+	elseif _G.m1m_Mode == "Nomal" then
+        _G.Fast_Delay = 0.15
 	end
 end)
 
@@ -1662,6 +1650,27 @@ end)
             end)
         end
     end)
+    
+    
+    
+local ToggleAutoY = Tabs.Main:AddToggle("ToggleAutoY", {Title = "Auto On v4", Description = "", Default = false })
+ToggleAutoY:OnChanged(function(Value)
+    _G.AutoY = Value
+    end)
+ Options.ToggleAutoY:SetValue(false)
+ spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.AutoY then
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,"Y",false,game)
+				wait(0.1)
+                game:GetService("VirtualInputManager"):SendKeyEvent(false,"Y",false,game)
+            end
+        end)
+    end
+    end)
+
+
 
 
     local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
@@ -3811,22 +3820,6 @@ ToggleAutoT:OnChanged(function(Value)
     end)
 
 
-local ToggleAutoY = Tabs.Setting:AddToggle("ToggleAutoY", {Title = "Auto Turn On V4", Description = "", Default = false })
-ToggleAutoY:OnChanged(function(Value)
-    _G.AutoY = Value
-    end)
- Options.ToggleAutoY:SetValue(false)
- spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.AutoY then
-                game:GetService("VirtualInputManager"):SendKeyEvent(true,"Y",false,game)
-				wait(0.1)
-                game:GetService("VirtualInputManager"):SendKeyEvent(false,"Y",false,game)
-            end
-        end)
-    end
-    end)
 
 
 local ToggleFastAttack = Tabs.Setting:AddToggle("ToggleFastAttack", {Title = "Enabled Fast Attack", Description = "", Default = true })
@@ -3837,7 +3830,7 @@ local ToggleFastAttack = Tabs.Setting:AddToggle("ToggleFastAttack", {Title = "En
     Options.ToggleFastAttack:SetValue(true)
 
 spawn(function()
-	while wait(0.4) do
+	while wait(0) do
 		pcall(function()
 			if _G.FastAttackFaiFao then
 				repeat wait(_G.Fast_Delay)
