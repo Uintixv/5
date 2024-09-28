@@ -1798,54 +1798,8 @@ spawn(function()
     end
 end)
 
-    local ToggleMobAura = Tabs.Main:AddToggle("ToggleMobAura", {
-        Title = "Farm Near Mob Map",
-        Description = "",
-        Default = false })
-    ToggleMobAura:OnChanged(function(Value)
-        _G.AutoNear = Value
-        if Value == false then
-            wait()
-            Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-            wait()
-        end
-    end)
-    Options.ToggleMobAura:SetValue(false)
-    spawn(function()
-        while wait(.1) do
-        if _G.AutoNear then
-        pcall(function()
-          for i,v in pairs (game.Workspace.Enemies:GetChildren()) do
-          if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-          if v.Name then
-          if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v:FindFirstChild("HumanoidRootPart").Position).Magnitude <= 5000 then
-            repeat wait(_G.Fast_Delay)
-                AttackNoCoolDown()
-                bringmob = true
-          AutoHaki()
-          EquipTool(SelectWeapon)
-          Tween(v.HumanoidRootPart.CFrame * CFrame.new(posX,posY,posZ))
-          v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-          v.HumanoidRootPart.Transparency = 1
-          v.Humanoid.JumpPower = 0
-          v.Humanoid.WalkSpeed = 0
-          v.HumanoidRootPart.CanCollide = false
-          FarmPos = v.HumanoidRootPart.CFrame
-          MonFarm = v.Name
-          --Click
-          until not _G.AutoNear or not v.Parent or v.Humanoid.Health <= 0 or not game.Workspace.Enemies:FindFirstChild(v.Name)
-          bringmob = false
-        end
-          end
-          end
-          end
-          end)
-        end
-        end
-      end)
-
-
-
+    
+    
 local ToggleSafeM = Tabs.Main:AddToggle("ToggleSafeM", {Title = "Auto Enable", Description = "", Default = true })
     ToggleMobAura:OnChanged(function(Value)
         _G.runwhenloworantiflag = Value
@@ -1900,7 +1854,7 @@ local Mastery = Tabs.Main:AddSection("Mastery Farm")
  
 
     local SliderHealt = Tabs.Main:AddSlider("SliderHealt", {
-        Title = "Health (%) Mob",
+        Title = "Health Mob",
         Description = "",
         Default = 25,
         Min = 0,
@@ -2057,43 +2011,6 @@ end
 end
 end)
 
-if Third_Sea then
-local MiscFarm = Tabs.Main:AddSection("Bone Farm")
-
-local StatusBone = Tabs.Main:AddParagraph({
-    Title = "Bone Status",
-    Content = ""
-})
-	spawn(function()
-		pcall(function()
-			while wait() do
-				StatusBone:SetDesc("You Have : "..tostring(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Bones","Check").." Bones"))
-			end
-		end)
-	end)
-
-
-local ToggleRandomBone = Tabs.Main:AddToggle("ToggleRandomBone", {Title = "Auto Random Bone",Description = "", Default = false })
-ToggleRandomBone:OnChanged(function(Value)  
-		_G.AutoRandomBone = Value
-end)
-Options.ToggleRandomBone:SetValue(false)
-	
-spawn(function()
-	while wait(0.0000000000000000000000000000000000000000000000000001) do
-	if _G.AutoRandomBone then
-	local args = {
-	 [1] = "Bones",
-	 [2] = "Buy",
-	 [3] = 1,
-	 [4] = 1
-	}
-	game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-	end
-	end
-	end)
-end
-if Third_Sea then
 local MiscFarm = Tabs.Main:AddSection("Katakuri Farm")
 local Mob_Kill_Cake_Prince = Tabs.Main:AddParagraph({
     Title = "Check Katakuri Spam",
@@ -2118,7 +2035,7 @@ end)
 
 
 local ToggleCake = Tabs.Main:AddToggle("ToggleCake", {
-    Title = "Auto Farm Cake Prince",
+    Title = "Farm Cake Prince",
     Description = "", 
     Default = false })
 ToggleCake:OnChanged(function(Value)
@@ -2190,7 +2107,6 @@ spawn(function()
       _G.SpawnCakePrince = Value
     end)
     Options.ToggleSpawnCake:SetValue(true)
-end
 
 spawn(function()
   while wait() do
@@ -2207,57 +2123,7 @@ spawn(function()
     end
   end
 end)
-end
-    if Second_Sea then
-	local MiscFarm = Tabs.Main:AddSection("Ectoplasm Farm")
-    local ToggleVatChatKiDi = Tabs.Main:AddToggle("ToggleVatChatKiDi", {
-        Title = "Auto Farm Ectoplasm",
-        Description = "", 
-        Default = false })
-    ToggleVatChatKiDi:OnChanged(function(Value)
-        _G.Ectoplasm = Value
-    end)
-    Options.ToggleVatChatKiDi:SetValue(false)
 
-    spawn(function()
-        while wait(.1) do
-            pcall(function()
-                if _G.Ectoplasm then
-                    if game:GetService("Workspace").Enemies:FindFirstChild("Ship Deckhand") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Engineer") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Steward") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Officer") then
-                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if v.Name == "Ship Steward" or v.Name == "Ship Engineer" or v.Name == "Ship Deckhand" or v.Name == "Ship Officer" and v:FindFirstChild("Humanoid") then
-                                if v.Humanoid.Health > 0 then
-                                    repeat wait(_G.Fast_Delay)
-                                        AttackNoCoolDown()
-                                        AutoHaki()
-                                        bringmob = true
-                                        EquipTool(SelectWeapon)
-                                        Tween(v.HumanoidRootPart.CFrame * CFrame.new(posX,posY,posZ))
-                                        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                        v.HumanoidRootPart.Transparency = 1
-                                        v.Humanoid.JumpPower = 0
-                                        v.Humanoid.WalkSpeed = 0
-                                        v.HumanoidRootPart.CanCollide = false
-                                        FarmPos = v.HumanoidRootPart.CFrame
-                                        MonFarm = v.Name
-                                        --Click
-                                    until _G.Ectoplasm == false or not v.Parent or v.Humanoid.Health == 0 or not game:GetService("Workspace").Enemies:FindFirstChild(v.Name)
-                                    bringmob = false
-                                end
-                            end
-                        end
-                    else
-                        local Distance = (Vector3.new(904.4072265625, 181.05767822266, 33341.38671875) - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                        if Distance > 20000 then
-                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
-                        end
-                        Tween(CFrame.new(904.4072265625, 181.05767822266, 33341.38671875))
-                    end
-                end
-            end)
-        end
-    end)
-end
 
 local boss = Tabs.Main:AddSection("Boss Farm")
 
@@ -3507,6 +3373,55 @@ local ToggleCastleRaid = Tabs.ITM:AddToggle("ToggleCastleRaid", {
             end
         end)
 
+
+local MiscFarm = Tabs.ITMn:AddSection("Ectoplasm Farm")
+    local ToggleVatChatKiDi = Tabs.Main:AddToggle("ToggleVatChatKiDi", {
+        Title = "Farm Ectoplasm",
+        Description = "", 
+        Default = false })
+    ToggleVatChatKiDi:OnChanged(function(Value)
+        _G.Ectoplasm = Value
+    end)
+    Options.ToggleVatChatKiDi:SetValue(false)
+
+    spawn(function()
+        while wait(.1) do
+            pcall(function()
+                if _G.Ectoplasm then
+                    if game:GetService("Workspace").Enemies:FindFirstChild("Ship Deckhand") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Engineer") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Steward") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Officer") then
+                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                            if v.Name == "Ship Steward" or v.Name == "Ship Engineer" or v.Name == "Ship Deckhand" or v.Name == "Ship Officer" and v:FindFirstChild("Humanoid") then
+                                if v.Humanoid.Health > 0 then
+                                    repeat wait(_G.Fast_Delay)
+                                        AttackNoCoolDown()
+                                        AutoHaki()
+                                        bringmob = true
+                                        EquipTool(SelectWeapon)
+                                        Tween(v.HumanoidRootPart.CFrame * CFrame.new(posX,posY,posZ))
+                                        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                        v.HumanoidRootPart.Transparency = 1
+                                        v.Humanoid.JumpPower = 0
+                                        v.Humanoid.WalkSpeed = 0
+                                        v.HumanoidRootPart.CanCollide = false
+                                        FarmPos = v.HumanoidRootPart.CFrame
+                                        MonFarm = v.Name
+                                        --Click
+                                    until _G.Ectoplasm == false or not v.Parent or v.Humanoid.Health == 0 or not game:GetService("Workspace").Enemies:FindFirstChild(v.Name)
+                                    bringmob = false
+                                end
+                            end
+                        end
+                    else
+                        local Distance = (Vector3.new(904.4072265625, 181.05767822266, 33341.38671875) - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                        if Distance > 20000 then
+                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
+                        end
+                        Tween(CFrame.new(904.4072265625, 181.05767822266, 33341.38671875))
+                    end
+                end
+            end)
+        end
+    end)
 
         local ToggleTushita = Tabs.ITM:AddToggle("ToggleTushita", {Title = "Auto Get Tushita",Description = "", Default = false })
         ToggleTushita:OnChanged(function(Value)
