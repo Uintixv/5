@@ -3374,7 +3374,7 @@ local ToggleCastleRaid = Tabs.ITM:AddToggle("ToggleCastleRaid", {
         end)
 
 
-local MiscFarm = Tabs.ITMn:AddSection("Ectoplasm Farm")
+local MiscFarm = Tabs.ITM:AddSection("Ectoplasm Farm")
     local ToggleVatChatKiDi = Tabs.Main:AddToggle("ToggleVatChatKiDi", {
         Title = "Farm Ectoplasm",
         Description = "", 
