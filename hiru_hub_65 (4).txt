@@ -3,19 +3,20 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 ----------------------------------------------------------------------------------------------------------------------------------------------
 local Window = Fluent:CreateWindow({
-    Title = "Hiru Hub",
-    SubTitle = "Version Beta 6⁵ | By Nguyen Vu Duy",
+    Title = "W-mera",
+    SubTitle = "New",
     TabWidth = 160,
-    Size = UDim2.fromOffset(550, 290),
+    Size = UDim2.fromOffset(580, 290),
     Acrylic = true,
     Theme = "Darker",
     MinimizeKey = Enum.KeyCode.End
 })
 local Tabs = {
     home = Window:AddTab({ Title = "Tab Info", Icon = "activity" }),
-    Main = Window:AddTab({ Title = "Tab Main Fram", Icon = "home" }),
-    Sea = Window:AddTab({ Title = "Tab Sea Event", Icon = "anchor" }),
-    ITM = Window:AddTab({ Title = "Tab Items", Icon = "sword" }),
+    Main = Window:AddTab({ Title = "Tab Main Fram", Icon = "" }),
+    Sea = Window:AddTab({ Title = "Tab Sea Event", Icon = "" }),
+    Lon = Window:AddTab({ Title = "Tab Player Status", Icon = "" }),
+    ITM = Window:AddTab({ Title = "Tab Items", Icon = "" }),
     Setting = Window:AddTab({ Title = "Tab Setting", Icon = "settings" }),
     Status = Window:AddTab({ Title = "Sever Status", Icon = "user" }),
     Stats = Window:AddTab({ Title = "Tab Stats", Icon = "plus-circle" }),
@@ -1632,25 +1633,47 @@ local DropdownSelectWeapon = Tabs.Main:AddDropdown("DropdownSelectWeapon", {
         end
     end)
     
-local listfastattack = {'Nomal','Supper'}
+    
+    
+local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "Fast Attack", Default = true })
 
-    local DropdownDelayAttack = Tabs.Main:AddDropdown("DropdownDelayAttack", {
-        Title = "Select Fast Attack",
-        Description = "",
-        Values = listfastattack,
-        Multi = false,
-        Default = 1,
-    })
-    DropdownDelayAttack:SetValue("Nomal")
-    DropdownDelayAttack:OnChanged(function(Value)
-    _G.m1m_Mode = Value
-	if _G.m1m_Mode == "Nomal" then
-		_G.Fast_Delay = 0.1
-    elseif _G.m1m_Mode == "Supper" then
-		_G.Fast_Delay = 0
-	end
+    Toggle:OnChanged(function(e)
+        _G.Fast_Delay = e
+    end)
+local CameraShaker = require(game.ReplicatedStorage.Util.CameraShaker)
+CombatFrameworkR = require(game:GetService("Players").LocalPlayer.PlayerScripts.CombatFramework)
+y = debug.getupvalues(CombatFrameworkR)[2]
+spawn(function()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if _G.Fast_Delay then
+            if typeof(y) == "table" then
+                pcall(function()
+                    CameraShaker:Stop()
+                    y.activeController.timeToNextAttack = (math.huge^math.huge^math.huge)
+                    y.activeController.timeToNextAttack = 0
+                    y.activeController.hitboxMagnitude = 70
+                    y.activeController.active = false
+                    y.activeController.timeToNextBlock = 0
+                    y.activeController.focusStart = 1655503339.0980349
+                    y.activeController.increment = 1
+                    y.activeController.blocking = false
+                    y.activeController.attacking = false
+                    y.activeController.humanoid.AutoRotate = true
+                end)
+            end
+        end
+    end)
+end)
+spawn(function()
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if _G.Fast_Delay == true then
+            game.Players.LocalPlayer.Character.Stun.Value = 0
+            game.Players.LocalPlayer.Character.Busy.Value = false        
+        end
+    end)
 end)
 
+    _G.Fast_Delay = 0
 
 
     local ToggleLevel = Tabs.Main:AddToggle("ToggleLevel", {
@@ -1712,6 +1735,68 @@ end)
         end
         end)
         
+local ToggleBone = Tabs.Main:AddToggle("ToggleBone", {
+    Title = "Farm Bone",
+    Description = "", 
+    Default = false })
+ToggleBone:OnChanged(function(Value)
+    _G.AutoBone = Value
+    if Value == false then
+        wait()
+        Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+        wait()
+    end
+end)
+Options.ToggleBone:SetValue(false)
+local BoneCFrame = CFrame.new(-9515.75, 174.8521728515625, 6079.40625)
+local BoneCFrame2 = CFrame.new(-9359.453125, 141.32679748535156, 5446.81982421875)
+spawn(function()
+    while wait() do
+        if _G.AutoBone then
+            pcall(function()
+                local QuestTitle = game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
+                if not string.find(QuestTitle, "Demonic Soul") then
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+                end
+                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
+                 toTarget(BoneCFrame)
+                if (BoneCFrame.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3 then    
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest","HauntedQuest2",1)
+                    end
+                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
+                    if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
+                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" then
+                                    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, "Demonic Soul") then
+                                        repeat wait(_G.Fast_Delay)
+                                            AttackNoCoolDown()
+                                            AutoHaki()
+                                            bringmob = true
+                                            EquipTool(SelectWeapon)
+                                            Tween(v.HumanoidRootPart.CFrame * CFrame.new(posX,posY,posZ))
+			                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                            v.HumanoidRootPart.Transparency = 1
+                                            v.Humanoid.JumpPower = 0
+                                            v.Humanoid.WalkSpeed = 0
+                                            v.HumanoidRootPart.CanCollide = false
+                                            FarmPos = v.HumanoidRootPart.CFrame
+                                            MonFarm = v.Name
+                                        until not _G.AutoBone or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
+                                    else
+                                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+                                        bringmob = false
+                                    end
+                                end
+                            end
+                        end
+                    else
+                    end
+                end
+            end)
+        end
+    end
+end)
 
     local ToggleMobAura = Tabs.Main:AddToggle("ToggleMobAura", {
         Title = "Farm Near Mob Map",
@@ -1987,69 +2072,6 @@ local StatusBone = Tabs.Main:AddParagraph({
 		end)
 	end)
 
-
-local ToggleBone = Tabs.Main:AddToggle("ToggleBone", {
-    Title = "Auto farm Bone",
-    Description = "", 
-    Default = false })
-ToggleBone:OnChanged(function(Value)
-    _G.AutoBone = Value
-    if Value == false then
-        wait()
-        Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-        wait()
-    end
-end)
-Options.ToggleBone:SetValue(false)
-local BoneCFrame = CFrame.new(-9515.75, 174.8521728515625, 6079.40625)
-local BoneCFrame2 = CFrame.new(-9359.453125, 141.32679748535156, 5446.81982421875)
-spawn(function()
-    while wait() do
-        if _G.AutoBone then
-            pcall(function()
-                local QuestTitle = game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
-                if not string.find(QuestTitle, "Demonic Soul") then
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                end
-                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
-                 toTarget(BoneCFrame)
-                if (BoneCFrame.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3 then    
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest","HauntedQuest2",1)
-                    end
-                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
-                    if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
-                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" then
-                                    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, "Demonic Soul") then
-                                        repeat wait(_G.Fast_Delay)
-                                            AttackNoCoolDown()
-                                            AutoHaki()
-                                            bringmob = true
-                                            EquipTool(SelectWeapon)
-                                            Tween(v.HumanoidRootPart.CFrame * CFrame.new(posX,posY,posZ))
-			                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                            v.HumanoidRootPart.Transparency = 1
-                                            v.Humanoid.JumpPower = 0
-                                            v.Humanoid.WalkSpeed = 0
-                                            v.HumanoidRootPart.CanCollide = false
-                                            FarmPos = v.HumanoidRootPart.CFrame
-                                            MonFarm = v.Name
-                                        until not _G.AutoBone or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
-                                    else
-                                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                                        bringmob = false
-                                    end
-                                end
-                            end
-                        end
-                    else
-                    end
-                end
-            end)
-        end
-    end
-end)
 
 local ToggleRandomBone = Tabs.Main:AddToggle("ToggleRandomBone", {Title = "Auto Random Bone",Description = "", Default = false })
 ToggleRandomBone:OnChanged(function(Value)  
