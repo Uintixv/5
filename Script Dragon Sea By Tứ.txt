@@ -1,0 +1,646 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+spawn(function()
+			while wait() do
+				pcall(function()
+					if Cac then
+						if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+							local Noclip = Instance.new("BodyVelocity")
+							Noclip.Name = "BodyClip"
+							Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+							Noclip.MaxForce = Vector3.new(100000,100000,100000)
+							Noclip.Velocity = Vector3.new(0,0,0)
+						end
+					else
+						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
+					end
+				end)
+			end
+		end)
+
+--// Load UI Library
+local repo = "https://raw.githubusercontent.com/deividcomsono/Obsidian/main/"
+local Library = loadstring(game:HttpGet(repo .. "Library.lua"))()
+local ThemeManager = loadstring(game:HttpGet(repo .. "addons/ThemeManager.lua"))()
+local SaveManager = loadstring(game:HttpGet(repo .. "addons/SaveManager.lua"))()
+
+local Window = Library:CreateWindow({
+    Title = "BlueSea (1.3.1)",
+    Footer = "Dragonsea",
+    Icon = 0,
+    NotifySide = "Right",
+    ShowCustomCursor = true,
+})
+
+--// Notify kèm âm thanh
+local function NotifyWithSound(msg)
+    Library:Notify(msg)
+    local SoundService = game:GetService("SoundService")
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://4590662766"
+    sound.Volume = 2
+    sound.PlayOnRemove = true
+    sound.Parent = SoundService
+    sound:Destroy()
+end
+
+-- Biến lưu giá trị vũ khí được chọn từ dropdown
+local Farming = false
+local SelectedWeapon = "Melee"
+local MethodFarm = "Above"
+local DistanceFarm = 24
+
+
+
+
+
+-- Vòng lặp kiểm tra và trang bị lại vũ khí liên tục nếu Farming đang bật
+spawn(function()
+    while wait() do
+        if Farming then
+           AcceptQuestByLevel()
+            EquipWeapon()
+            wait(1)
+        end
+    end
+end)
+
+-- Vòng lặp kiểm tra hồi sinh và trang bị lại vũ khí khi nhân vật hồi sinh
+spawn(function()
+    while wait() do
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") and Farming then
+            EquipWeapon() -- Trang bị lại vũ khí khi hồi sinh
+        end
+    end
+end)
+
+function StartFarm()
+    farming = true
+    spawn(function()
+        while farming do
+            -- Nhận quest 1 lần
+            AcceptQuestByLevel()
+
+            -- Farm đến khi quest hoàn thành
+            AutoFarmAll(selectedMob)
+
+            -- Chờ tí rồi mới nhận lại quest
+            wait(0.4)
+        end
+    end)
+end
+
+-- Hàm dừng farm
+function StopFarm()
+    farming = false
+end
+
+function AcceptQuestByLevel()
+    local Level = game:GetService("Players").LocalPlayer.Data.Levels.Value
+
+    if Level >= 1 and Level <= 49 then
+        selectedMob = "Bandit"
+        TeleportToNPC("Level1")
+        currentQuest = "Level1"
+    elseif Level >= 50 and Level <= 99 then
+        selectedMob = "Bandit Boss"
+        TeleportToNPC("Level50")
+        currentQuest = "Level50"
+    elseif Level >= 100 and Level <= 149 then
+        selectedMob = "Sand Bandit"
+        TeleportToNPC("Level100")
+        currentQuest = "Level100"
+    elseif Level >= 150 and Level <= 199 then
+        selectedMob = "Sand Warden"
+        TeleportToNPC("Level150")
+        currentQuest = "Level150"
+    elseif Level >= 200 and Level <= 299 then
+        selectedMob = "Sand Boss"
+        TeleportToNPC("Level200")
+        currentQuest = "Level200"
+    elseif Level >= 300 and Level <= 349 then
+        selectedMob = "Snow Bandit"
+        TeleportToNPC("Level300")
+        currentQuest = "Level300"
+    elseif Level >= 350 and Level <= 399 then
+        selectedMob = "Snow Man"
+        TeleportToNPC("Level350")
+        currentQuest = "Level350"
+    elseif Level >= 400 and Level <= 499 then
+        selectedMob = "Pumpkin Man"
+        TeleportToNPC("Level400")
+        currentQuest = "Level400"
+    elseif Level >= 500 and Level <= 549 then
+        selectedMob = "Good Namekian"
+        TeleportToNPC("Level500")
+        currentQuest = "Level500"
+    elseif Level >= 550 and Level <= 599 then
+        selectedMob = "Evil Namekian"
+        TeleportToNPC("Level550")
+        currentQuest = "Level550"
+    elseif Level >= 600 and Level <= 649 then
+        selectedMob = "Fishman Soldiers"
+        TeleportToNPC("Level600")
+        currentQuest = "Level600"
+    elseif Level >= 650 and Level <= 749 then
+        selectedMob = "Fishman Guard"
+        TeleportToNPC("Level650")
+        currentQuest = "Level650"
+    elseif Level >= 750 and Level <= 799 then
+        selectedMob = "Wild Warrior"
+        TeleportToNPC("Level750")
+        currentQuest = "Level750"
+    elseif Level >= 800 and Level <= 849 then
+        selectedMob = "Vine Raider"
+        TeleportToNPC("Level800")
+        currentQuest = "Level800"
+    elseif Level >= 850 and Level <= 949 then
+        selectedMob = "Shadow Bandit"
+        TeleportToNPC("Level850")
+        currentQuest = "Level850"
+    elseif Level >= 950 and Level <= 999 then
+        selectedMob = "Tribal Bandit"
+        TeleportToNPC("Level950")
+        currentQuest = "Level950"
+    elseif Level >= 1000 and Level <= 1049 then
+        selectedMob = "Beast Walker"
+        TeleportToNPC("Level1000")
+        currentQuest = "Level1000"
+     elseif Level >= 1050 and Level <= 1099 then
+        selectedMob = "Night Watcher"
+        TeleportToNPC("Level1050")
+        currentQuest = "Level1050"
+      elseif Level >= 1100 and Level <= 1149 then
+        selectedMob = "City Rogue"
+        TeleportToNPC("Level1100")
+        currentQuest = "Level1100"
+      elseif Level >= 1150 and Level <= 1199 then
+        selectedMob = "Wasteland Thief"
+        TeleportToNPC("Level1150")
+        currentQuest = "Level1150"
+      elseif Level >= 1200 and Level <= 1249 then
+        selectedMob = "Dust Man"
+        TeleportToNPC("Level1200")
+        currentQuest = "Level1200"
+      elseif Level >= 1250 and Level <= 1299 then
+        selectedMob = "Canyon Rogue"
+        TeleportToNPC("Level1250")
+        currentQuest = "Level1250"
+      elseif Level >= 1300 and Level <= 1349 then
+        selectedMob = "Rubble Scavenger"
+        TeleportToNPC("Level1300")
+        currentQuest = "Level1300"
+        elseif Level >= 1350 and Level <= 1399 then
+        selectedMob = "Street Wrecker"
+        TeleportToNPC("Level1350")
+        currentQuest = "Level1350"
+        elseif Level >= 1400 and Level <= 1449 then
+        selectedMob = "Lost Soldier"
+        TeleportToNPC("Level1400")
+        currentQuest = "Level1400"
+        elseif Level >= 1450 and Level <= 1499 then
+        selectedMob = "Scrap Thief"
+        TeleportToNPC("Level1450")
+        currentQuest = "Level1450"
+        elseif Level >= 1500 and Level <= 1600 then
+        selectedMob = "Deadzone Lurker"
+        TeleportToNPC("Level1500")
+        currentQuest = "Level1500"
+    else
+        print("Không có nhiệm vụ cho cấp độ này!")
+    end
+end
+
+
+
+
+function TeleportToNPC(npcName)
+wait(0.1)
+    local npc = game:GetService("Workspace").Maps.QuestNpc:FindFirstChild(npcName)
+    if npc then
+        -- Dịch chuyển người chơi đến vị trí NPC
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = npc.ClickPart.CFrame
+        wait(0)
+
+        -- Kích hoạt ProximityPrompt để nhận nhiệm vụ
+        local proximityPrompt = npc.ClickPart:FindFirstChild("ProximityPrompt")
+        if proximityPrompt then
+            fireproximityprompt(proximityPrompt, 1)
+        end
+
+        -- Kích hoạt sự kiện FireServer để nhận nhiệm vụ từ GUI
+        local questGui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("TakeQuest")
+        if questGui and questGui:FindFirstChild("ConnectQuest") then
+            questGui.ConnectQuest:FireServer()
+        else
+            warn("Không tìm thấy GUI nhiệm vụ.")
+        end
+    else
+        warn("Không tìm thấy NPC: " .. npcName)
+    end
+end
+
+
+
+function AutoFarmAll(mobName)
+    local player = game.Players.LocalPlayer
+    local mobs = game:GetService("Workspace").Maps.Npcs:GetChildren()
+
+    for _, mob in pairs(mobs) do
+        if mob.Name == mobName and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
+            -- Đánh con quái này cho đến khi chết
+            while mob.Humanoid.Health > 0 and farming do
+                MoveToMob(mob)
+                Click()
+                wait()
+            end
+        end
+    end
+
+    -- ❌ Không còn AcceptQuestByLevel() ở đây nữa
+    -- Để quest hoàn thành rồi StartFarm loop tự nhận lại
+end
+
+-- Hàm di chuyển đến vị trí quái vật dựa trên phương pháp farm
+function MoveToMob(mob)
+    local player = game.Players.LocalPlayer
+
+    if MethodFarm == "Above" then
+        player.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, DistanceFarm, 0) -- Di chuyển phía trên quái
+    elseif MethodFarm == "Below" then
+        player.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, DistanceFarm, 0) * CFrame.Angles(math.rad(90), 0, 0)
+    elseif MethodFarm == "Upper" then
+        player.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, DistanceFarm, 0) * CFrame.Angles(math.rad(-90), 0, 0) -- Di chuyển bên trên quái
+    else
+        -- Phương pháp mặc định (di chuyển phía sau quái)
+        player.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 0, -DistanceFarm)
+    end
+end
+
+local Tabs = {
+    Main = Window:AddTab("Status", ""),
+    Tab = Window:AddTab("Farm", ""),
+}
+
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox("Status")
+
+--// Data Player
+local player = game:GetService("Players").LocalPlayer
+local Data = player:WaitForChild("Data")
+local RedCrystal = Data:WaitForChild("RedCrystal")
+local HakiLevels = Data:WaitForChild("HakiLevels")
+
+--// Label Status Player
+local CrystalLabel = LeftGroupBox:AddLabel("RedCrystal : " .. RedCrystal.Value)
+RedCrystal:GetPropertyChangedSignal("Value"):Connect(function()
+    CrystalLabel:SetText("RedCrytal :" .. RedCrystal.Value)
+end)
+
+
+
+--// Boss Labels
+local BossLabels = {
+    ["Black Kuku [Raid Boss]"] = LeftGroupBox:AddLabel("Black Kuku : .."),
+    ["SeaKingBoss"] = LeftGroupBox:AddLabel("Sea King : .."),
+    ["Oozaru"] = LeftGroupBox:AddLabel("Oozaru : .."),
+    ["Flower Boss"] = LeftGroupBox:AddLabel("Flower Boss : .."),
+    ["Thunder God"] = LeftGroupBox:AddLabel("Thunder God: .."),
+}
+
+
+
+
+--// Boss Spawn Tracker
+local LastStatus = {}
+
+task.spawn(function()
+    while task.wait(1) do
+        for BossName, Label in pairs(BossLabels) do
+            local boss = workspace.Maps.Npcs:FindFirstChild(BossName)
+            local alive = boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0
+
+            -- Update label
+            if alive then
+                Label:SetText(BossName .. " : Spawn ")
+            else
+                Label:SetText(BossName .. " : Not Spawn ")
+            end
+
+            -- Notify khi boss mi spawn
+            if alive and not LastStatus[BossName] then
+                NotifyWithSound(BossName .. " Spawn in!")
+            end
+
+            -- Cp nht trng thái
+            LastStatus[BossName] = alive
+        end
+    end
+end)
+
+
+
+
+--Tab2
+local Gr1 = Tabs.Tab:AddLeftGroupbox("Level")
+
+Gr1:AddCheckbox("Level", {
+    Text = "Farm Level",
+    Default = false,
+    Callback = function(Value)
+        Farming = Value
+        Cac = Value
+        if Value then
+            StartFarm()
+        else
+            StopFarm()
+        end
+    end,
+})
+
+local Gr2 = Tabs.Tab:AddRightGroupbox("Boss")
+
+-- Toggle UI
+Gr2:AddCheckbox("Oozari", {
+    Text = "Farm Boss Oozari",
+    Default = false,
+    Callback = function(Value)
+        FarmOozaru = Value
+    end,
+})
+
+-- Toggle farm Kuku/mob
+Gr2:AddCheckbox("FarmKuku", {
+    Text = "Farm Black Kuku / Mob",
+    Default = false,
+    Callback = function(Value)
+        FarmKuku = Value
+        Cac = Value
+    end,
+})
+
+Gr2:AddCheckbox("FarmFlo", {
+    Text = "Farm Boss Flo",
+    Default = false,
+    Callback = function(Value)
+        FarmFlo = Value
+    end,
+})
+
+
+
+Gr2:AddCheckbox("FarmSea", {
+    Text = "Farm Boss Sea",
+    Default = false,
+    Callback = function(Value)
+        FarmSea = Value
+    end,
+})
+
+Gr2:AddCheckbox("FarmThunder", {
+    Text = "Farm Boss ThunderGosth",
+    Default = false,
+    Callback = function(Value)
+        FarmThunder = Value
+    end,
+})
+
+
+spawn(function()
+    while wait() do
+        if FarmOozaru then
+            local boss = workspace.Maps.Npcs:FindFirstChild("Oozaru")
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                pcall(function()
+                    repeat
+                        RunService.Heartbeat:Wait() -- bám mượt theo boss
+                        
+                        -- Mở SimulationRadius vô hạn
+                        sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+                        
+                        -- Auto click
+                        Click()
+                        
+                        -- Bám dính trên đầu boss
+                        local bossHeight = boss.Humanoid.HipHeight or 5
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, bossHeight + 3, 0)
+                        
+                    until not FarmOozaru or not boss.Parent or boss.Humanoid.Health <= 0
+                end)
+            end
+        end
+    end
+end)
+
+
+
+-- Vị trí cố định để ấn ProximityPrompt
+local mobPos = Vector3.new(-2277.18, 186.48, 1188.30)
+local mobNames = {"Wild Warrior", "Shadow Bandit", "Vine Raider"}
+
+
+-- Hàm lấy character
+local function getChar()
+    return LocalPlayer.Character
+end
+
+-- Hàm FarmTarget
+local function FarmTarget(target)
+    if not target 
+        or not target:FindFirstChild("Humanoid") 
+        or target.Humanoid.Health <= 0 
+    then 
+        return 
+    end
+
+    repeat
+        if not FarmKuku then break end
+
+        RunService.Heartbeat:Wait()
+
+        -- mở rộng radius để đánh xa
+        sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+
+        -- Click mỗi 0.1 giây
+        Click()
+        task.wait(0.1)
+
+        local char = getChar()
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            -- đứng trên đầu target 14 studs
+            char.HumanoidRootPart.CFrame = target.HumanoidRootPart.CFrame * CFrame.new(0, 14, 0)
+        end
+
+    until not target.Parent or target.Humanoid.Health <= 0
+end
+
+-- Vòng lặp chính
+spawn(function()
+    while task.wait(0.1) do
+        if FarmKuku then
+            -- Tìm boss Kuku
+            local boss = Workspace.Maps.Npcs:FindFirstChild("Black Kuku [Raid Boss]")
+
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                -- Farm boss
+                FarmTarget(boss)
+            else
+                -- Kiểm tra còn mob nào sống không
+                local mobAlive = nil
+                for _, mobName in pairs(mobNames) do
+                    for _, mob in pairs(Workspace.Maps.Npcs:GetChildren()) do
+                        if mob.Name == mobName and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
+                            mobAlive = mob
+                            break
+                        end
+                    end
+                    if mobAlive then break end
+                end
+
+                if mobAlive then
+                    -- Farm mob nếu còn
+                    FarmTarget(mobAlive)
+                else
+                    -- Không còn mob và boss → spawn boss mới
+                    local char = LocalPlayer.Character
+                    if char and char:FindFirstChild("HumanoidRootPart") then
+                        char.HumanoidRootPart.CFrame = CFrame.new(mobPos)
+                        task.wait(0.5)
+                        local prompt = workspace.Maps.BossSpawn.BlackGoku.SpawnModel.Potara.ProximityPrompt
+                        if prompt then
+                            fireproximityprompt(prompt, prompt.HoldDuration or 0)
+                        end
+                    end
+                end
+            end
+        else
+            task.wait(0.3) -- giảm lag khi tắt toggle
+        end
+    end
+end)
+
+
+spawn(function()
+    while wait() do
+        if FarmFlo then
+            local boss = workspace.Maps.Npcs:FindFirstChild("Flower Boss")
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                pcall(function()
+                    repeat
+                        RunService.Heartbeat:Wait() -- bám mượt theo boss
+                        
+                        -- Mở SimulationRadius vô hạn
+                        sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+                        
+                        -- Auto click
+                        Click()
+                        
+                        -- Bám dính trên đầu boss
+                        local bossHeight = boss.Humanoid.HipHeight or 5
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, bossHeight + 3, 0)
+                        
+                    until not FarmFlo or not boss.Parent or boss.Humanoid.Health <= 0
+                end)
+            end
+        end
+    end
+end)
+
+
+
+
+spawn(function()
+    while wait() do
+        if FarmSea then
+            local boss = workspace.Maps.Npcs:FindFirstChild("SeaKingBoss")
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                pcall(function()
+                    repeat
+                        RunService.Heartbeat:Wait() -- bám mượt theo boss
+                        
+                        -- Mở SimulationRadius vô hạn
+                        sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+                        
+                        -- Auto click
+                        Click()
+                        
+                        -- Bám dính trên đầu boss
+                        local bossHeight = boss.Humanoid.HipHeight or 5
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, bossHeight + 3, 0)
+                        
+                    until not FarmSea or not boss.Parent or boss.Humanoid.Health <= 0
+                end)
+            end
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        if FarmThunder then
+            local boss = workspace.Maps.Npcs:FindFirstChild("Thunder God")
+            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+                pcall(function()
+                    repeat
+                        RunService.Heartbeat:Wait() -- bám mượt theo boss
+                        
+                        -- Mở SimulationRadius vô hạn
+                        sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+                        
+                        -- Auto click
+                        Click()
+                        
+                        -- Bám dính trên đầu boss
+                        local bossHeight = boss.Humanoid.HipHeight or 5
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, bossHeight + 3, 0)
+                        
+                    until not FarmThunder or not boss.Parent or boss.Humanoid.Health <= 0
+                end)
+            end
+        end
+    end
+end)
+
+-- Hàm Click (bn NPC gn nht)
+function Click()
+    local Players = game:GetService("Players")
+    local player  = Players.LocalPlayer
+    local char    = player.Character or player.CharacterAdded:Wait()
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+    local myPos = char.HumanoidRootPart.Position
+
+    -- Tìm NPC gn nht
+    local nearestNpc
+    local shortest = math.huge
+    for _, npc in pairs(workspace.Maps.Npcs:GetChildren()) do
+        local hrp = npc:FindFirstChild("HumanoidRootPart")
+        local hum = npc:FindFirstChildOfClass("Humanoid")
+        if hrp and hum and hum.Health > 0 then
+            local dist = (hrp.Position - myPos).Magnitude
+            if dist < shortest then
+                shortest = dist
+                nearestNpc = hrp
+            end
+        end
+    end
+
+    -- Bn tt c tool
+    if nearestNpc then
+        local playerTools = {}
+        local char = game.Players.LocalPlayer.Character
+        for _, t in ipairs(player.Backpack:GetChildren()) do if t:IsA("Tool") then table.insert(playerTools, t) end end
+        for _, t in ipairs(char:GetChildren()) do if t:IsA("Tool") then table.insert(playerTools, t) end end
+
+        for _, tool in ipairs(playerTools) do
+            local combat = tool:FindFirstChild("Combat")
+            if combat then
+                local remote = combat:FindFirstChild("RemoteEvent")
+                if remote and remote:IsA("RemoteEvent") then
+                    remote:FireServer(nearestNpc.Position)
+                end
+            end
+        end
+    end
+end
