@@ -1085,7 +1085,7 @@ BackgroundColor3 = 'DialogHolderLine'
 L_198_.ButtonHolder
 })
 L_198_.Title = L_193_('TextLabel', {
-FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.SemiBold, Enum.FontStyle.Normal),
+FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Bold, Enum.FontStyle.Normal),
 Text = 'Dialog',
 TextColor3 = Color3.fromRGB(240, 240, 240),
 TextSize = 22,
@@ -1174,7 +1174,7 @@ local L_221_, L_222_ = L_220_.New, L_219_.Spring.new
 return function(L_223_arg0, L_224_arg1, L_225_arg2, L_226_arg3)
 local L_227_ = {}
 L_227_.TitleLabel = L_221_('TextLabel', {
-FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Medium, Enum.FontStyle.Normal),
+FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Bold, Enum.FontStyle.Normal),
 Text = L_223_arg0,
 TextColor3 = Color3.fromRGB(240, 240, 240),
 TextSize = 13,
@@ -2481,7 +2481,7 @@ L_558_.Frame.Size = UDim2.new(0, 90, 0, 32)
 return L_558_
 end, function(L_559_arg0, L_560_arg1)
 return L_512_('TextLabel', {
-FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Medium, Enum.FontStyle.Normal),
+FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Bold, Enum.FontStyle.Normal),
 Text = L_559_arg0,
 TextColor3 = Color3.fromRGB(240, 240, 240),
 TextSize = 13,
